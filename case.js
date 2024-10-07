@@ -167,22 +167,26 @@ const totalFitur = () =>{
 if (mek.key.id.startsWith('3EB0')) return
 
 switch(command) {
-case 'promosi': {     
-    let lastUsed = {};
-    const userId = message.sender; 
-    const cooldownTime = 20 * 60 * 1000
-    const now = Date.now();
+// Objek untuk menyimpan waktu terakhir pengguna menggunakan fitur
 
+
+case 'promosi': {
+let lastUsed = {};
+    const userId = m.key.remoteJid; // Menggunakan userId dari pesan pengirim
+    const cooldownTime = 20 * 60 * 1000; // 20 menit dalam milidetik
+    const now = Date.now(); // Waktu saat ini
+
+    // Periksa apakah pengguna sudah pernah menggunakan fitur dan apakah waktu jeda sudah habis
     if (lastUsed[userId] && now - lastUsed[userId] < cooldownTime) {
         const remainingTime = Math.ceil((cooldownTime - (now - lastUsed[userId])) / 1000 / 60);
         return reply(`[!] Harap tunggu ${remainingTime} menit lagi sebelum menggunakan fitur ini lagi.`);
     }
+
+    // Jika tidak ada teks yang diberikan
     if (!text) return reply('[!] Mana Text Yang Mau Di Promosikan');
 
     // Kirim pesan promosi
-    Rafael.sendMessage(idsal, { text: `${text}
-    
-    [ SHARE BY RAFAEL ]`, quoted: fVerif });
+    Rafael.sendMessage(idsal, { text: `${text}`, quoted: fVerif });
 
     // Simpan waktu penggunaan terakhir fitur oleh pengguna
     lastUsed[userId] = now;
